@@ -15,9 +15,29 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function fetchEnvVariables() {
-    const response = await fetch('/env');
-    const env = await response.json();
-    OPENAI_API_KEY = env.OPENAI_API_KEY;
+    // Check if OPENAI_API_KEY is in localStorage
+    let openaiKey = localStorage.getItem('OPENAI_API_KEY');
+    if (openaiKey) {
+        OPENAI_API_KEY = openaiKey.replace(/'/g, ''); // Remove single quotes
+        console.log('OPENAI_API_KEY loaded from localStorage');
+    } else {
+        // Fetch from .env file if not found in localStorage
+        try {
+            const response = await fetch('.env');
+            if (response.ok) {
+                const envText = await response.text();
+                const openaiKeyMatch = envText.match(/^OPENAI_API_KEY=(.*)$/m);
+                if (openaiKeyMatch) {
+                    OPENAI_API_KEY = openaiKeyMatch[1].replace(/'/g, '');
+                    console.log('OPENAI_API_KEY loaded from .env file');
+                }
+            } else {
+                console.log('.env file not found');
+            }
+        } catch (error) {
+            console.error('Error fetching .env file:', error);
+        }
+    }
 }
 
 async function generateEmbedding(text) {

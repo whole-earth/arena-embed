@@ -54,26 +54,12 @@ async function fetchArenaContents() {
 
 async function setEnv() {
     const openaiKey = document.getElementById('openaiKey').value;
-    const envFilePath = '.env';
-
     try {
-        const response = await fetch(envFilePath);
-        if (!response.ok) {
-            // .env file does not exist, create it
-            const envContent = `OPENAI_API_KEY='${openaiKey}'\n`;
-            await fetch(envFilePath, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'text/plain'
-                },
-                body: envContent
-            });
-            console.log('.env file created and OPENAI_API_KEY set');
-        } else {
-            console.log('.env file already exists');
-        }
+        // Save the API key to localStorage with single quotes
+        localStorage.setItem('OPENAI_API_KEY', `'${openaiKey}'`);
+        console.log('OPENAI_API_KEY saved to localStorage');
     } catch (error) {
-        console.error('Error checking or creating .env file:', error);
+        console.error('Error saving OPENAI_API_KEY to localStorage:', error);
     }
 }
 
