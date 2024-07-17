@@ -55,7 +55,6 @@ async function fetchArenaContents() {
 async function setEnv() {
     const openaiKey = document.getElementById('openaiKey').value;
     try {
-        // Save the API key to localStorage with single quotes
         localStorage.setItem('OPENAI_API_KEY', `'${openaiKey}'`);
         console.log('OPENAI_API_KEY saved to localStorage');
     } catch (error) {

@@ -82,7 +82,9 @@ async function processEmbeddings() {
 
     localStorage.setItem('selectedBlocks', JSON.stringify(selectedBlocks));
     console.log(selectedBlocks);
-    downloadJSON(selectedBlocks, 'selectedBlocks.json');
+    const filename = localStorage.getItem('arenaChannelTitle');
+    downloadJSON(selectedBlocks, `${filename}.json`);
+    downloadCSV(selectedBlocks, `${filename}.csv`);
 }
 
 function downloadJSON(data, filename) {
@@ -90,10 +92,45 @@ function downloadJSON(data, filename) {
     const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
 
-    // Create a new button element
     const button = document.createElement('button');
     button.textContent = 'Download JSON';
     button.style.display = 'block';
+    button.style.marginBottom = '10px';
+    button.onclick = () => {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        button.textContent = 'Job Completed!';
+        button.style.backgroundColor = "green";
+    };
+
+    document.body.appendChild(button);
+}
+
+function downloadCSV(data, filename) {
+    // Convert data to CSV format
+    const array = typeof data !== 'object' ? JSON.parse(data) : data;
+    const headers = Object.keys(array[0]);
+    const csvRows = [headers.join(',')];
+
+    for (const item of array) {
+        const values = headers.map(header => JSON.stringify(item[header], replacer));
+        csvRows.push(values.join(','));
+    }
+
+    const csv = csvRows.join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+
+    // Create a new button element
+    const button = document.createElement('button');
+    button.textContent = 'Download CSV';
+    button.style.display = 'block';
+    button.style.marginBottom = '10px';
     button.onclick = () => {
         const a = document.createElement('a');
         a.href = url;
@@ -108,4 +145,8 @@ function downloadJSON(data, filename) {
 
     // Append the button to the body or a specific container
     document.body.appendChild(button);
+}
+
+function replacer(key, value) {
+    return value === null ? '' : value;
 }
