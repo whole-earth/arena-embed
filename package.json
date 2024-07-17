@@ -1,0 +1,18 @@
+{
+  "name": "arena-block-exporter",
+  "version": "1.0.0",
+  "description": "Are.na Block Exporter and Embedder",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "git": "^0.1.5",
+    "umap-js": "1.3.3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
