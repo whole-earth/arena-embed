@@ -1,5 +1,8 @@
 HTML Day 2024 - weekend hack
-Scope: renders selected blocks from an Are.na channel into 512-dimensional vector embeddings using OpenAI's `text-embedding-3-small`.
+
+## Render selected blocks from an Are.na channel into 512-dimensional vector embeddings using OpenAI's `text-embedding-3-small`
+
+---
 
 **Step 1**: Paste Are.na channel URL + OpenAI API keys and select desired blocks from channel
 
